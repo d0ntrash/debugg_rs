@@ -7,8 +7,7 @@ use windows_sys::Win32::System::Diagnostics::Debug::{DEBUG_EVENT,
                                                      CREATE_THREAD_DEBUG_EVENT,
                                                      EXIT_THREAD_DEBUG_EVENT,
                                                      LOAD_DLL_DEBUG_EVENT,
-                                                     UNLOAD_DLL_DEBUG_EVENT,
-                                                     ADDRESS64};
+                                                     UNLOAD_DLL_DEBUG_EVENT};
 use windows_sys::Win32::Foundation::DBG_CONTINUE;
 use std::ptr;
 use std::mem;
@@ -25,14 +24,6 @@ macro_rules! wide_string {
         vec
     }};
 }
-
-// fn to_addr64(pointer: u32) -> ADDRESS64 {
-//     ADDRESS64 {
-//         Offset: pointer as u64,
-//         Segment: 0,
-//         Mode: 3
-//     }
-// }
 
 fn main() {
     let startup_info = mem::MaybeUninit::<STARTUPINFOW>::zeroed();

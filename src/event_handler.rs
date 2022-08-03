@@ -28,8 +28,6 @@ pub fn load_dll_debug_event_handler(debug_event: &DEBUG_EVENT) {
         .map(|r| r.unwrap_or(REPLACEMENT_CHARACTER))
         .collect::<String>();
     println!("LOADED DLL FROM: {file_path}");
-    // let b = &file_path_buffer[0];
-    // println!("Byte: {b:x}");
 }
 
 pub fn unload_dll_debug_event_handler(_debug_event: &DEBUG_EVENT) {
@@ -64,13 +62,14 @@ pub fn create_thread_debug_handler(debug_event: &DEBUG_EVENT) {
         println!("Failed getting thread context: {os_error:?}");
         return;
     }
-    let rip = thread_context.Eip;
-    println!("RIP: {rip}");
+    let eip = thread_context.Eip;
+    println!("EIP: {eip}");
 
 }
 
 pub fn exit_thread_debug_handler(debug_event: &DEBUG_EVENT) {
     println!("EXIT_THREAD_DEBUG_EVENT");
+
     let thread_id = debug_event.dwThreadId;
     println!("EXIT THREAD WITH ID: {thread_id}");
 }
