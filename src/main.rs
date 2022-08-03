@@ -6,6 +6,8 @@ use windows_sys::Win32::System::Diagnostics::Debug::{DEBUG_EVENT,
                                                      EXIT_PROCESS_DEBUG_EVENT,
                                                      CREATE_THREAD_DEBUG_EVENT,
                                                      EXIT_THREAD_DEBUG_EVENT,
+                                                     LOAD_DLL_DEBUG_EVENT,
+                                                     UNLOAD_DLL_DEBUG_EVENT,
                                                      ADDRESS64};
 use windows_sys::Win32::Foundation::DBG_CONTINUE;
 use std::ptr;
@@ -71,6 +73,8 @@ fn main() {
             EXIT_PROCESS_DEBUG_EVENT => event_handler::exit_process_debug_event_handler(&debug_event),
             CREATE_THREAD_DEBUG_EVENT => event_handler::create_thread_debug_handler(&debug_event),
             EXIT_THREAD_DEBUG_EVENT => event_handler::exit_thread_debug_handler(&debug_event),
+            LOAD_DLL_DEBUG_EVENT => event_handler::load_dll_debug_event_handler(&debug_event),
+            UNLOAD_DLL_DEBUG_EVENT => event_handler::unload_dll_debug_event_handler(&debug_event),
             _ => {}
         };
         unsafe {

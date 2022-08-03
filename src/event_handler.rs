@@ -1,8 +1,40 @@
 use windows_sys::Win32::System::Diagnostics::Debug::{DEBUG_EVENT,
                                                      Wow64GetThreadContext,
                                                      WOW64_CONTEXT};
+use windows_sys::Win32::Storage::FileSystem::{GetFinalPathNameByHandleW, FILE_NAME_NORMALIZED};
 use std::mem;
 use std::io::Error;
+use std::char::{decode_utf16, REPLACEMENT_CHARACTER};
+
+pub fn load_dll_debug_event_handler(debug_event: &DEBUG_EVENT) {
+    println!("LOAD_DLL_DEBUG_EVENT");
+    let dll_event_info = unsafe { debug_event.u.LoadDll };
+    let dll_file_handle = dll_event_info.hFile;
+    // let dll_base_address = dll_event_info.lpBaseOfDll;
+    let mut file_path_buffer: Vec<u16> = vec![0; 255];
+
+    let path_status = unsafe{GetFinalPathNameByHandleW(dll_file_handle,
+                                                       file_path_buffer.as_mut_ptr(),
+                                                       254,
+                                                       FILE_NAME_NORMALIZED)};
+
+    if path_status == 0 {
+        let os_error = Error::last_os_error();
+        println!("Failed getting thread context: {os_error:?}");
+        return;
+    }
+
+    let file_path = decode_utf16(file_path_buffer)
+        .map(|r| r.unwrap_or(REPLACEMENT_CHARACTER))
+        .collect::<String>();
+    println!("LOADED DLL FROM: {file_path}");
+    // let b = &file_path_buffer[0];
+    // println!("Byte: {b:x}");
+}
+
+pub fn unload_dll_debug_event_handler(_debug_event: &DEBUG_EVENT) {
+    println!("UNLOAD_DLL_DEBUG_EVENT");
+}
 
 pub fn create_process_debug_event_handler(debug_event: &DEBUG_EVENT) {
     println!("CREATE_PROCESS_DEBUG_EVENT");
