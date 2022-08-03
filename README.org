@@ -1,0 +1,4 @@
+#+TITLE: debugg_rs
+#+AUTHOR: d0ntrash
+** About
+   This is a basic debugger implementation based on the Debugging Fundamentals course of [[https://www.patreon.com/oalabs][OALabs]].
